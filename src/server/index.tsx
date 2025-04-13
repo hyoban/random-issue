@@ -1,11 +1,47 @@
 import { Hono } from 'hono'
+import { env } from 'hono/adapter'
+import { validator } from 'hono/validator'
+import { z } from 'zod'
 
-import route from './api'
+import apiRoute from './api'
+import { getOpenIssues, getWatchedRepository, random } from './lib'
 import { renderer } from './renderer'
 
 const app = new Hono()
 
-app.route('/', route)
+app.route('/', apiRoute)
+
+const schema = z.object({
+  user: z.string(),
+  repo: z.string().optional(),
+})
+
+app.get(
+  '/:user/:repo?',
+  validator('param', (value, c) => {
+    const parsed = schema.safeParse(value)
+    if (!parsed.success) {
+      return c.text('Invalid parameters', 400)
+    }
+    return parsed.data
+  }),
+  async (c) => {
+    const { GITHUB_TOKEN } = env<{ GITHUB_TOKEN: string }>(c)
+    const { user, repo } = c.req.valid('param')
+
+    const fullRepo = repo ? `${user}/${repo}` : random(await getWatchedRepository(user, GITHUB_TOKEN))
+    if (!fullRepo) {
+      return c.text('No watched repositories found', 404)
+    }
+
+    const issueURL = random(await getOpenIssues(fullRepo, GITHUB_TOKEN))
+
+    if (!issueURL) {
+      return c.text(`No open issues found for ${fullRepo}`, 404)
+    }
+    return c.redirect(issueURL, 302)
+  },
+)
 
 app.use(renderer)
 app.get('/', (c) => {
