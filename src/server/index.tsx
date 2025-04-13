@@ -13,7 +13,13 @@ app.get('/', (c) => {
     <main className="h-full flex flex-col items-center pt-10 gap-4">
       <h1 className="text-3xl font-bold">Random Issue</h1>
       <p>Pick a random issue by username or repository name</p>
-      <p>Example: <a href="/RSSNext/Folo" className="underline">RSSNext/Folo</a></p>
+      <p>
+        Example:
+        {' '}
+        <a href="/RSSNext/Folo" className="underline">RSSNext/Folo</a>
+        {' '}
+        <a href="/hyoban" className="underline">hyoban</a>
+      </p>
       <div id="root" />
     </main>,
   )

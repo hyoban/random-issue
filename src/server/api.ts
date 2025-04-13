@@ -19,6 +19,9 @@ const storage = createStorage({
 })
 
 function random(data: string[]) {
+  if (data.length === 0) {
+    return null
+  }
   const randomIndex = Math.floor(Math.random() * data.length)
   return data[randomIndex]
 }
@@ -44,11 +47,13 @@ async function getRandomWatchedRepository(user: string, GITHUB_TOKEN: string) {
     )
     const data = (await res.json()) as Array<{
       full_name: string
+      private: boolean
+      open_issues: number
     }>
     if (data.length === 0) {
       break
     }
-    watchedRepos = [...watchedRepos, ...data.map(d => d.full_name)]
+    watchedRepos = [...watchedRepos, ...data.filter(d => !d.private && d.open_issues > 0).map(d => d.full_name)]
     page++
   }
   await storage.set(`${user}:watched-repos`, JSON.stringify(watchedRepos))
@@ -77,11 +82,12 @@ async function getRandomIssue(fullRepo: string, GITHUB_TOKEN: string) {
     )
     const data = (await res.json()) as Array<{
       html_url: string
+      pull_request?: Record<string, unknown>
     }>
     if (data.length === 0) {
       break
     }
-    allIssues = [...allIssues, ...data.map(d => d.html_url)]
+    allIssues = [...allIssues, ...data.filter(d => !d.pull_request).map(d => d.html_url)]
     page++
   }
   await storage.set(`${fullRepo}:issues`, JSON.stringify(allIssues))
@@ -90,7 +96,7 @@ async function getRandomIssue(fullRepo: string, GITHUB_TOKEN: string) {
 }
 
 const route = app.get(
-  '/:user/:repo',
+  '/:user/:repo?',
   validator('param', (value, c) => {
     const parsed = schema.safeParse(value)
     if (!parsed.success) {
@@ -103,8 +109,15 @@ const route = app.get(
     const { user, repo } = c.req.valid('param')
 
     const fullRepo = repo ? `${user}/${repo}` : await getRandomWatchedRepository(user, GITHUB_TOKEN)
+    if (!fullRepo) {
+      return c.text('No watched repositories found', 404)
+    }
 
     const issueURL = await getRandomIssue(fullRepo, GITHUB_TOKEN)
+
+    if (!issueURL) {
+      return c.text(`No open issues found for ${fullRepo}`, 404)
+    }
     return c.redirect(issueURL, 302)
   },
 )
