@@ -29,7 +29,14 @@ export default function App() {
   return (
     <form action={submitAction} className="max-w-xl flex flex-col items-center mt-10">
       <div className="flex gap-2">
-        <input type="text" name="user" className="border px-2 py-1 rounded" autoComplete="off" data-1p-ignore />
+        <input
+          type="text"
+          name="user"
+          placeholder="GitHub username"
+          className="border px-2 py-1 rounded"
+          autoComplete="off"
+          data-1p-ignore
+        />
         <button type="submit" disabled={isPending}>Search</button>
       </div>
 
