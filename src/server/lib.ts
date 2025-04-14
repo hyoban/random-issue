@@ -43,7 +43,7 @@ export async function getWatchedRepository({
 
   while (true) {
     const res = await fetch(
-        `https://api.github.com/users/${user}/subscriptions?page=${page}`,
+        `https://api.github.com/users/${user}/subscriptions?page=${page}&per_page=1000`,
         {
           headers: {
             'Accept': 'application/vnd.github+json',
@@ -94,7 +94,7 @@ export async function getOpenIssues(fullRepo: string, GITHUB_TOKEN: string) {
   let issuesCount = 0
   while (true) {
     const res = await fetch(
-        `https://api.github.com/repos/${fullRepo}/issues?state=open&page=${page}`,
+        `https://api.github.com/repos/${fullRepo}/issues?state=open&page=${page}&per_page=1000`,
         {
           headers: {
             'Accept': 'application/vnd.github+json',
