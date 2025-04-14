@@ -29,7 +29,7 @@ app.get(
     const { GITHUB_TOKEN } = env<{ GITHUB_TOKEN: string }>(c)
     const { user, repo } = c.req.valid('param')
 
-    const fullRepo = repo ? `${user}/${repo}` : random(await getWatchedRepository(user, GITHUB_TOKEN))
+    const fullRepo = repo ? `${user}/${repo}` : random(await getWatchedRepository({ user, GITHUB_TOKEN }))
     if (!fullRepo) {
       return c.text('No watched repositories found', 404)
     }

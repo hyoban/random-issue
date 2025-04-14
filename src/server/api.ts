@@ -23,7 +23,7 @@ const route = app.get(
   async (c) => {
     const { GITHUB_TOKEN } = env<{ GITHUB_TOKEN: string }>(c)
     const { user } = c.req.valid('param')
-    const watchedRepos = await getWatchedRepository(user, GITHUB_TOKEN)
+    const watchedRepos = await getWatchedRepository({ user, GITHUB_TOKEN })
 
     return c.json(watchedRepos)
   },

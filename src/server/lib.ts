@@ -15,7 +15,21 @@ export function random(data: string[]) {
   return data[randomIndex]
 }
 
-export async function getWatchedRepository(user: string, GITHUB_TOKEN: string) {
+/**
+ * https://docs.github.com/en/rest/activity/watching?apiVersion=2022-11-28#list-repositories-watched-by-a-user
+ */
+export async function getWatchedRepository({
+  user,
+  GITHUB_TOKEN,
+  pushedAfterYear = 3,
+}: {
+  user: string
+  GITHUB_TOKEN: string
+  pushedAfterYear?: number
+}) {
+  const updatedAfter = new Date()
+  updatedAfter.setFullYear(updatedAfter.getFullYear() - pushedAfterYear)
+
   const cached = await storage.get<string[]>(`${user}:watched-repos`)
   if (cached) {
     return cached
@@ -39,13 +53,18 @@ export async function getWatchedRepository(user: string, GITHUB_TOKEN: string) {
       private: boolean
       open_issues: number
       archived: boolean
+      pushed_at: string
     }>
     if (data.length === 0) {
       break
     }
     watchedRepos = [
       ...watchedRepos,
-      ...data.filter(d => !d.private && d.open_issues > 0 && !d.archived).map(d => d.full_name),
+      ...data
+        .filter((d) => {
+          return !d.private && d.open_issues > 0 && !d.archived && d.pushed_at && new Date(d.pushed_at) > updatedAfter
+        })
+        .map(d => d.full_name),
     ]
     page++
   }
