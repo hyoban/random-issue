@@ -33,6 +33,9 @@ importers:
       '@egoist/tailwindcss-icons':
         specifier: ^1.9.0
         version: 1.9.0(tailwindcss@4.1.3)
+      '@iconify-json/mingcute':
+        specifier: ^1.2.3
+        version: 1.2.3
       '@iconify-json/simple-icons':
         specifier: ^1.2.31
         version: 1.2.31
@@ -748,6 +751,9 @@ packages:
     engines: {node: '>=18.12.0'}
     peerDependencies:
       tailwindcss: ^3.4.0
+
+  '@iconify-json/mingcute@1.2.3':
+    resolution: {integrity: sha512-yiEQfLBF5iwyOdxuY0kEU06+8Mp6Mrp14KVXTb+5jjSVuD71C9EQrzM/mm1Efd8Nu2amJalTPisl3loC8pHBqQ==}
 
   '@iconify-json/simple-icons@1.2.31':
     resolution: {integrity: sha512-xBUPtvkcSAiXs9DfVtudhLddQtQYin3I3Ph/W5FNYA0oE6r2hmLB8TgOog9OjOt1Sxn3IB5+4n5+64DMf2xNmQ==}
@@ -3577,6 +3583,10 @@ snapshots:
       fast-glob: 3.3.3
       postcss: 8.5.3
       tailwindcss: 4.1.3
+
+  '@iconify-json/mingcute@1.2.3':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify-json/simple-icons@1.2.31':
     dependencies:

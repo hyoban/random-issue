@@ -23,6 +23,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250413.0",
     "@egoist/tailwindcss-icons": "^1.9.0",
+    "@iconify-json/mingcute": "^1.2.3",
     "@iconify-json/simple-icons": "^1.2.31",
     "@types/react": "^19.1.1",
     "@types/react-dom": "^19.1.2",

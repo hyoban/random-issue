@@ -27,28 +27,43 @@ export default function App() {
   )
 
   return (
-    <form action={submitAction} className="max-w-xl flex flex-col items-center mt-2">
-      <div className="flex gap-2">
-        <input
-          type="text"
-          name="user"
-          placeholder="GitHub username"
-          className="border px-2 py-1 rounded"
-          autoComplete="off"
-          data-1p-ignore
-        />
-        <button type="submit" disabled={isPending}>Search</button>
-      </div>
-
-      <ul className="flex flex-col gap-2 font-mono my-4 text-sm">
-        {repos?.map(repo => (
-          <li key={repo} className="underline">
-            <a href={`/${repo}`} target="_blank" rel="noopener noreferrer">
-              {repo}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </form>
+    <>
+      <form action={submitAction} className="max-w-xl flex flex-col items-center my-2">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            name="user"
+            placeholder="GitHub username"
+            className="border px-2 py-1 rounded"
+            autoComplete="off"
+            data-1p-ignore
+          />
+          <button
+            type="submit"
+            disabled={isPending}
+            className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Search
+          </button>
+        </div>
+      </form>
+      {
+        isPending ? (
+          <div className="flex items-center justify-center my-4">
+            <div className="i-mingcute-loading-3-fill animate-spin" />
+          </div>
+        ) : (
+          <ul className="flex flex-col gap-2 font-mono my-4 text-sm">
+            {repos?.map(repo => (
+              <li key={repo} className="underline">
+                <a href={`/${repo}`} target="_blank" rel="noopener noreferrer">
+                  {repo}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </>
   )
 }
