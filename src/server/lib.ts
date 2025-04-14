@@ -43,7 +43,7 @@ export async function getWatchedRepository({
 
   while (true) {
     const res = await fetch(
-        `https://api.github.com/users/${user}/subscriptions?page=${page}&per_page=1000`,
+        `https://api.github.com/users/${user}/subscriptions?page=${page}&per_page=100`,
         {
           headers: {
             'Accept': 'application/vnd.github+json',
@@ -59,7 +59,7 @@ export async function getWatchedRepository({
       archived: boolean
       pushed_at: string
     }>
-    if (data.length === 0 || reposCount >= maxRepos) {
+    if (data.length < 100 || reposCount >= maxRepos) {
       break
     }
     reposCount += data.length
@@ -94,7 +94,7 @@ export async function getOpenIssues(fullRepo: string, GITHUB_TOKEN: string) {
   let issuesCount = 0
   while (true) {
     const res = await fetch(
-        `https://api.github.com/repos/${fullRepo}/issues?state=open&page=${page}&per_page=1000`,
+        `https://api.github.com/repos/${fullRepo}/issues?state=open&page=${page}&per_page=100`,
         {
           headers: {
             'Accept': 'application/vnd.github+json',
@@ -108,7 +108,7 @@ export async function getOpenIssues(fullRepo: string, GITHUB_TOKEN: string) {
       html_url: string
       pull_request?: Record<string, unknown>
     }>
-    if (data.length === 0 || issuesCount >= maxIssues) {
+    if (data.length < 100 || issuesCount >= maxIssues) {
       break
     }
     issuesCount += data.length
