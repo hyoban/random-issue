@@ -5,5 +5,6 @@
   "main": "./src/server/index.tsx",
   "assets": {
     "directory": "dist"
-  }
+  },
+  "keep_vars": true
 }
