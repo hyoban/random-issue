@@ -1,3 +1,3 @@
-```bash
-npx giget@latest gh:yusukebe/hono-vite-react-stack-example my-app
-```
+# Random Issue
+
+Pick a random issue by username or repository name
