@@ -77,7 +77,7 @@ app.get('/', (c) => {
           GitHub
         </a>
         <a
-          href="https://x.com/hyoban_cc"
+          href="https://x.com/hyoban_cc/status/1911612034124550407"
           target="_blank"
           rel="noopener noreferrer"
           className="i-simple-icons-x"
