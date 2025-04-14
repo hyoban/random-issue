@@ -35,7 +35,7 @@ export async function getWatchedRepository({
     return cached
   }
   let page = 1
-  let watchedRepos: string[] = []
+  let watchedRepos: Array<{ full_name: string, pushed_at: string }> = []
 
   while (true) {
     const res = await fetch(
@@ -64,12 +64,19 @@ export async function getWatchedRepository({
         .filter((d) => {
           return !d.private && d.open_issues > 0 && !d.archived && d.pushed_at && new Date(d.pushed_at) > updatedAfter
         })
-        .map(d => d.full_name),
+        .map(d => ({
+          full_name: d.full_name,
+          pushed_at: d.pushed_at,
+        })),
     ]
     page++
   }
-  await storage.set(`${user}:watched-repos`, JSON.stringify(watchedRepos))
-  return watchedRepos
+  watchedRepos = watchedRepos.sort((a, b) => {
+    return new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime()
+  })
+  const res = watchedRepos.map(d => d.full_name)
+  await storage.set(`${user}:watched-repos`, JSON.stringify(res))
+  return res
 }
 
 export async function getOpenIssues(fullRepo: string, GITHUB_TOKEN: string) {
