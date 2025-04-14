@@ -67,15 +67,25 @@ app.get('/', (c) => {
           </a>
         ))}
       </p>
+      <div className="flex gap-2">
+        <a
+          href="https://github.com/hyoban/random-issue"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="i-simple-icons-github"
+        >
+          GitHub
+        </a>
+        <a
+          href="https://x.com/hyoban_cc"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="i-simple-icons-x"
+        >
+          X
+        </a>
+      </div>
       <div id="root" />
-      <a
-        href="https://github.com/hyoban/random-issue"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="i-simple-icons-github"
-      >
-        GitHub
-      </a>
     </main>,
   )
 })
