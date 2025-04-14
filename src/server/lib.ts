@@ -59,7 +59,7 @@ export async function getWatchedRepository({
       archived: boolean
       pushed_at: string
     }>
-    if (data.length < 100 || reposCount >= maxRepos) {
+    if (reposCount >= maxRepos) {
       break
     }
     reposCount += data.length
@@ -74,6 +74,9 @@ export async function getWatchedRepository({
           pushed_at: d.pushed_at,
         })),
     ]
+    if (data.length < 100) {
+      break
+    }
     page++
   }
   watchedRepos = watchedRepos.sort((a, b) => {
@@ -108,11 +111,14 @@ export async function getOpenIssues(fullRepo: string, GITHUB_TOKEN: string) {
       html_url: string
       pull_request?: Record<string, unknown>
     }>
-    if (data.length < 100 || issuesCount >= maxIssues) {
+    if (issuesCount >= maxIssues) {
       break
     }
     issuesCount += data.length
     allIssues = [...allIssues, ...data.map(d => d.html_url)]
+    if (data.length < 100) {
+      break
+    }
     page++
   }
   await storage.set(`${fullRepo}:open_issues`, JSON.stringify(allIssues))
