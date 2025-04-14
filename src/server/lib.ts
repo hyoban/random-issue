@@ -38,11 +38,15 @@ export async function getWatchedRepository(user: string, GITHUB_TOKEN: string) {
       full_name: string
       private: boolean
       open_issues: number
+      archived: boolean
     }>
     if (data.length === 0) {
       break
     }
-    watchedRepos = [...watchedRepos, ...data.filter(d => !d.private && d.open_issues > 0).map(d => d.full_name)]
+    watchedRepos = [
+      ...watchedRepos,
+      ...data.filter(d => !d.private && d.open_issues > 0 && !d.archived).map(d => d.full_name),
+    ]
     page++
   }
   await storage.set(`${user}:watched-repos`, JSON.stringify(watchedRepos))
