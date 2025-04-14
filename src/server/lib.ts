@@ -79,7 +79,7 @@ export async function getOpenIssues(fullRepo: string, GITHUB_TOKEN: string) {
     if (data.length === 0) {
       break
     }
-    allIssues = [...allIssues, ...data.filter(d => !d.pull_request).map(d => d.html_url)]
+    allIssues = [...allIssues, ...data.map(d => d.html_url)]
     page++
   }
   await storage.set(`${fullRepo}:open_issues`, JSON.stringify(allIssues))
