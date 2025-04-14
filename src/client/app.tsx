@@ -27,7 +27,7 @@ export default function App() {
   )
 
   return (
-    <form action={submitAction} className="max-w-xl flex flex-col items-center mt-10">
+    <form action={submitAction} className="max-w-xl flex flex-col items-center mt-2">
       <div className="flex gap-2">
         <input
           type="text"
