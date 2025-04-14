@@ -1,6 +1,9 @@
 import { createStorage } from 'unstorage'
 import lruCacheDriver from 'unstorage/drivers/lru-cache'
 
+const maxRepos = 500
+const maxIssues = 1000
+
 const storage = createStorage({
   driver: lruCacheDriver({
     ttl: 1000 * 60 * 60 * 1,
@@ -36,6 +39,7 @@ export async function getWatchedRepository({
   }
   let page = 1
   let watchedRepos: Array<{ full_name: string, pushed_at: string }> = []
+  let reposCount = 0
 
   while (true) {
     const res = await fetch(
@@ -55,9 +59,10 @@ export async function getWatchedRepository({
       archived: boolean
       pushed_at: string
     }>
-    if (data.length === 0) {
+    if (data.length === 0 || reposCount >= maxRepos) {
       break
     }
+    reposCount += data.length
     watchedRepos = [
       ...watchedRepos,
       ...data
@@ -86,6 +91,7 @@ export async function getOpenIssues(fullRepo: string, GITHUB_TOKEN: string) {
   }
   let page = 1
   let allIssues: string[] = []
+  let issuesCount = 0
   while (true) {
     const res = await fetch(
         `https://api.github.com/repos/${fullRepo}/issues?state=open&page=${page}`,
@@ -102,9 +108,10 @@ export async function getOpenIssues(fullRepo: string, GITHUB_TOKEN: string) {
       html_url: string
       pull_request?: Record<string, unknown>
     }>
-    if (data.length === 0) {
+    if (data.length === 0 || issuesCount >= maxIssues) {
       break
     }
+    issuesCount += data.length
     allIssues = [...allIssues, ...data.map(d => d.html_url)]
     page++
   }
