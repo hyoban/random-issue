@@ -12,7 +12,7 @@ const app = new Hono()
 app.route('/', apiRoute)
 
 const schema = z.object({
-  user: z.string(),
+  user: z.string().regex(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i),
   repo: z.string().optional(),
 })
 

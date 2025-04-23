@@ -10,11 +10,27 @@ const storage = createStorage({
   }),
 })
 
+const lastChoice: number[] = []
+const maxLastChoice = 10
+const maxRandomTime = 5
+
 export function random(data: string[]) {
   if (data.length === 0) {
     return null
   }
-  const randomIndex = Math.floor(Math.random() * data.length)
+  let randomIndex = Math.floor(Math.random() * data.length)
+  let randomTime = 0
+
+  while (lastChoice.includes(randomIndex) && randomTime < maxRandomTime) {
+    randomIndex = Math.floor(Math.random() * data.length)
+    randomTime++
+  }
+
+  if (lastChoice.length >= maxLastChoice) {
+    lastChoice.shift()
+  }
+  lastChoice.push(randomIndex)
+
   return data[randomIndex]
 }
 
@@ -59,6 +75,9 @@ export async function getWatchedRepository({
       archived: boolean
       pushed_at: string
     }>
+    if (!Array.isArray(data)) {
+      break
+    }
     if (reposCount >= maxRepos) {
       break
     }
