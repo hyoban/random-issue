@@ -52,7 +52,7 @@ const examples = [
 app.use(renderer)
 app.get('/', (c) => {
   return c.render(
-    <main className="h-full flex flex-col items-center pt-10 gap-4">
+    <main className="flex h-full flex-col items-center gap-4 pt-10">
       <h1 className="text-3xl font-bold">Random Issue</h1>
       <p>Pick a random issue by username or repository name</p>
       <p className="flex gap-2">

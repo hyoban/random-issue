@@ -28,13 +28,13 @@ export default function App() {
 
   return (
     <>
-      <form action={submitAction} className="max-w-xl flex flex-col items-center my-2">
+      <form action={submitAction} className="my-2 flex max-w-xl flex-col items-center">
         <div className="flex gap-2">
           <input
             type="text"
             name="user"
             placeholder="GitHub username"
-            className="border px-2 py-1 rounded"
+            className="rounded border px-2 py-1"
             autoComplete="off"
             data-1p-ignore
           />
@@ -49,11 +49,11 @@ export default function App() {
       </form>
       {
         isPending ? (
-          <div className="flex items-center justify-center my-4">
+          <div className="my-4 flex items-center justify-center">
             <div className="i-mingcute-loading-3-fill animate-spin" />
           </div>
         ) : (
-          <ul className="flex flex-col gap-2 font-mono my-4 text-sm">
+          <ul className="my-4 flex flex-col gap-2 font-mono text-sm">
             {repos?.map(repo => (
               <li key={repo} className="underline">
                 <a href={`/${repo}`} target="_blank" rel="noopener noreferrer">
